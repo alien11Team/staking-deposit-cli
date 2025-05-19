@@ -60,9 +60,10 @@ def generate_keys_arguments_decorator(function: Callable[..., Any]) -> Callable[
                 lambda num: validate_int_range(num, 1, 2**32),
                 lambda: load_text(['num_validators', 'prompt'], func='generate_keys_arguments_decorator')
             ),
+            default=1,
             help=lambda: load_text(['num_validators', 'help'], func='generate_keys_arguments_decorator'),
             param_decls="--num_validators",
-            prompt=lambda: load_text(['num_validators', 'prompt'], func='generate_keys_arguments_decorator'),
+            #prompt=lambda: load_text(['num_validators', 'prompt'], func='generate_keys_arguments_decorator'),
         ),
         jit_option(
             default=os.getcwd(),
@@ -81,24 +82,25 @@ def generate_keys_arguments_decorator(function: Callable[..., Any]) -> Callable[
             default=MAINNET,
             help=lambda: load_text(['chain', 'help'], func='generate_keys_arguments_decorator'),
             param_decls='--chain',
-            prompt=choice_prompt_func(
-                lambda: load_text(['chain', 'prompt'], func='generate_keys_arguments_decorator'),
-                # Since `prater` is alias of `goerli`, do not show `prater` in the prompt message.
-                list(key for key in ALL_CHAINS.keys() if key != PRATER)
-            ),
+            # prompt=choice_prompt_func(
+            #     lambda: load_text(['chain', 'prompt'], func='generate_keys_arguments_decorator'),
+            #     # Since `prater` is alias of `goerli`, do not show `prater` in the prompt message.
+            #     list(key for key in ALL_CHAINS.keys() if key != PRATER)
+            # ),
         ),
         jit_option(
-            callback=captive_prompt_callback(
-                validate_password_strength,
-                lambda:load_text(['keystore_password', 'prompt'], func='generate_keys_arguments_decorator'),
-                lambda:load_text(['keystore_password', 'confirm'], func='generate_keys_arguments_decorator'),
-                lambda: load_text(['keystore_password', 'mismatch'], func='generate_keys_arguments_decorator'),
-                True,
-            ),
+            # callback=captive_prompt_callback(
+            #     validate_password_strength,
+            #     lambda:load_text(['keystore_password', 'prompt'], func='generate_keys_arguments_decorator'),
+            #     lambda:load_text(['keystore_password', 'confirm'], func='generate_keys_arguments_decorator'),
+            #     lambda: load_text(['keystore_password', 'mismatch'], func='generate_keys_arguments_decorator'),
+            #     True,
+            # ),
+            default="12345678",
             help=lambda: load_text(['keystore_password', 'help'], func='generate_keys_arguments_decorator'),
             hide_input=True,
             param_decls='--keystore_password',
-            prompt=lambda: load_text(['keystore_password', 'prompt'], func='generate_keys_arguments_decorator'),
+            #prompt=lambda: load_text(['keystore_password', 'prompt'], func='generate_keys_arguments_decorator'),
         ),
         jit_option(
             callback=captive_prompt_callback(
@@ -164,4 +166,4 @@ def generate_keys(ctx: click.Context, validator_start_index: int,
     if not verify_deposit_data_json(deposits_file, credentials.credentials):
         raise ValidationError(load_text(['err_verify_deposit']))
     click.echo(load_text(['msg_creation_success']) + folder)
-    click.pause(load_text(['msg_pause']))
+    # click.pause(load_text(['msg_pause']))

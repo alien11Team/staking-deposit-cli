@@ -69,15 +69,15 @@ def validate_mnemonic(ctx: click.Context, param: Any, mnemonic: str) -> str:
 )
 @load_mnemonic_arguments_decorator
 @jit_option(
-    callback=captive_prompt_callback(
-        lambda num: validate_int_range(num, 0, 2**32),
-        lambda: load_text(['arg_validator_start_index', 'prompt'], func='existing_mnemonic'),
-        lambda: load_text(['arg_validator_start_index', 'confirm'], func='existing_mnemonic'),
-    ),
+    # callback=captive_prompt_callback(
+    #     lambda num: validate_int_range(num, 0, 2**32),
+    #     lambda: load_text(['arg_validator_start_index', 'prompt'], func='existing_mnemonic'),
+    #     lambda: load_text(['arg_validator_start_index', 'confirm'], func='existing_mnemonic'),
+    # ),
     default=0,
     help=lambda: load_text(['arg_validator_start_index', 'help'], func='existing_mnemonic'),
     param_decls="--validator_start_index",
-    prompt=lambda: load_text(['arg_validator_start_index', 'prompt'], func='existing_mnemonic'),
+    #prompt=lambda: load_text(['arg_validator_start_index', 'prompt'], func='existing_mnemonic'),
 )
 @generate_keys_arguments_decorator
 @click.pass_context

@@ -42,20 +42,20 @@ languages = get_first_options(MNEMONIC_LANG_OPTIONS)
     default=lambda: load_text(['arg_mnemonic_language', 'default'], func='new_mnemonic'),
     help=lambda: load_text(['arg_mnemonic_language', 'help'], func='new_mnemonic'),
     param_decls='--mnemonic_language',
-    prompt=choice_prompt_func(lambda: load_text(['arg_mnemonic_language', 'prompt'], func='new_mnemonic'), languages),
+    #prompt=choice_prompt_func(lambda: load_text(['arg_mnemonic_language', 'prompt'], func='new_mnemonic'), languages),
 )
 @generate_keys_arguments_decorator
 def new_mnemonic(ctx: click.Context, mnemonic_language: str, **kwargs: Any) -> None:
     mnemonic = get_mnemonic(language=mnemonic_language, words_path=WORD_LISTS_PATH)
-    test_mnemonic = ''
-    while mnemonic != reconstruct_mnemonic(test_mnemonic, WORD_LISTS_PATH):
-        click.clear()
-        click.echo(load_text(['msg_mnemonic_presentation']))
-        click.echo('\n\n%s\n\n' % mnemonic)
-        click.pause(load_text(['msg_press_any_key']))
+    # test_mnemonic = ''
+    # while mnemonic != reconstruct_mnemonic(test_mnemonic, WORD_LISTS_PATH):
+    #     click.clear()
+    #     click.echo(load_text(['msg_mnemonic_presentation']))
+    #     click.echo('\n\n%s\n\n' % mnemonic)
+    #     click.pause(load_text(['msg_press_any_key']))
 
-        click.clear()
-        test_mnemonic = click.prompt(load_text(['msg_mnemonic_retype_prompt']) + '\n\n')
+    #     click.clear()
+    #     test_mnemonic = click.prompt(load_text(['msg_mnemonic_retype_prompt']) + '\n\n')
     click.clear()
     # Do NOT use mnemonic_password.
     ctx.obj = {'mnemonic': mnemonic, 'mnemonic_password': ''}

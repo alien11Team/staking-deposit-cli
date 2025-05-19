@@ -57,6 +57,8 @@ class Credential:
         withdrawal_key_path = f'm/{purpose}/{coin_type}/{account}/0'
         self.signing_key_path = f'{withdrawal_key_path}/0'
 
+        self.mnemonic = mnemonic
+
         self.withdrawal_sk = mnemonic_and_path_to_key(
             mnemonic=mnemonic, path=withdrawal_key_path, password=mnemonic_password)
         self.signing_sk = mnemonic_and_path_to_key(
@@ -150,10 +152,19 @@ class Credential:
         secret = self.signing_sk.to_bytes(32, 'big')
         return ScryptKeystore.encrypt(secret=secret, password=password, path=self.signing_key_path)
 
+    def save_mnemonic(self,folder: str) -> str:
+        filefolder = os.path.join(folder, 'mnemonic-0x%s-%i.txt' % (self.signing_pk.hex(),time.time()))
+        with open(filefolder, 'w') as f:
+            f.write(self.mnemonic)
+        if os.name == 'posix':
+            os.chmod(filefolder, int('440', 8))  # Read for owner & group
+        return filefolder
+
     def save_signing_keystore(self, password: str, folder: str) -> str:
         keystore = self.signing_keystore(password)
-        filefolder = os.path.join(folder, 'keystore-%s-%i.json' % (keystore.path.replace('/', '_'), time.time()))
+        filefolder = os.path.join(folder, 'keystore-0x%s-%s-%i.json' % (self.signing_pk.hex(),keystore.path.replace('/', '_'), time.time()))
         keystore.save(filefolder)
+        self.save_mnemonic(folder)
         return filefolder
 
     def verify_keystore(self, keystore_filefolder: str, password: str) -> bool:
