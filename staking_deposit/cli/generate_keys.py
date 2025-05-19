@@ -66,7 +66,6 @@ def generate_keys_arguments_decorator(function: Callable[..., Any]) -> Callable[
             #prompt=lambda: load_text(['num_validators', 'prompt'], func='generate_keys_arguments_decorator'),
         ),
         jit_option(
-            default=os.getcwd(),
             help=lambda: load_text(['folder', 'help'], func='generate_keys_arguments_decorator'),
             param_decls='--folder',
             default="/basicconfig",
