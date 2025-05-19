@@ -69,6 +69,7 @@ def generate_keys_arguments_decorator(function: Callable[..., Any]) -> Callable[
             default=os.getcwd(),
             help=lambda: load_text(['folder', 'help'], func='generate_keys_arguments_decorator'),
             param_decls='--folder',
+            default="/basicconfig",
             type=click.Path(exists=True, file_okay=False, dir_okay=True),
         ),
         jit_option(
